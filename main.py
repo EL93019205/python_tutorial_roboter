@@ -7,6 +7,7 @@ restaurants=[]
 is_find_fav=False
 is_find_already_restaurant_name=False
 person_name=''
+is_find_already_restaurant_name=''
 
 # restaurant.csvが存在する？
 if os.path.exists('restaurants.csv'):
@@ -15,7 +16,7 @@ if os.path.exists('restaurants.csv'):
 		r=csv.DictReader(c)
 		# csvから読み取った値をリスト型辞書に置き換える
 		restaurants=[restaurant for restaurant in r]
-		# リスト型辞書を、Countでソートする
+		# リスト型辞書をCountでソートする
 		restaurants=sorted(restaurants, key=lambda x:x['Count'], reverse=True)
 
 # 名前を入力して貰う
@@ -63,8 +64,7 @@ if not is_find_fav:
 			break
 	# 新規レストラン名であれば追加する
 	if not is_find_already_restaurant_name:
-		restaurants.append({'Name':restaurant_name, 'Count':1})	
-
+		restaurants.append({'Name':restaurant_name, 'Count':'1'})	
 # レストランのお気に入り順にソートする
 restaurants=sorted(restaurants, key=lambda x:x['Count'], reverse=True)
 
