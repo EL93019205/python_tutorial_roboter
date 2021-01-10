@@ -1,83 +1,84 @@
-# import
+"""This is a Roboter"""
 import os
 import csv
 
 # 変数宣言
-restaurants=[]
-is_find_fav=False
-is_find_already_restaurant_name=False
-person_name=''
-is_find_already_restaurant_name=''
+RESTAURANTS = []
+IS_FIND_FAB = False
+IS_FIND_ALREADY_RESTAURANT_NAME = False
+PERSON_NAME = ''
+RESTAURANT_NAME = ''
+print(type(IS_FIND_FAB))
+print(type(PERSON_NAME))
 
 # restaurant.csvが存在する？
 if os.path.exists('restaurants.csv'):
-	# restaurants.csvファイルを読み込む
-	with open('restaurants.csv', 'r') as c:
-		r=csv.DictReader(c)
-		# csvから読み取った値をリスト型辞書に置き換える
-		restaurants=[restaurant for restaurant in r]
-		# リスト型辞書をCountでソートする
-		restaurants=sorted(restaurants, key=lambda x:x['Count'], reverse=True)
+    # restaurants.csvファイルを読み込む
+    with open('restaurants.csv', 'r') as c:
+        # csvから読み取った値をリスト型辞書に置き換える
+        RESTAURANTS = list(csv.DictReader(c))
+        # リスト型辞書をCountでソートする
+        RESTAURANTS = sorted(RESTAURANTS, key=lambda x: x['Count'],
+                             reverse=True)
 
 # 名前を入力して貰う
 print('名前を入力してください')
-person_name=input()
+PERSON_NAME = input()
 
-#restaurantsが空でない？
-if any(restaurants):
-	for i, restaurant in enumerate(restaurants):
-		print(restaurant['Name']+'は好きですか？[y/n]')
-		while True:
-			yn=input()
-			if yn == 'y':
-				break
-			if yn == 'yes':
-				yn='y'
-				break
-			if yn == 'Yes':
-				yn='y'
-				break
-			if yn == 'Y':
-				yn='y'
-				break
-			if yn == 'n':
-				break
-			if yn == 'no':
-				break
-			if yn == 'No':
-				break
-		if yn=='y':
-			restaurants[i]['Count']=str(int(restaurants[i]['Count'])+1)
-			is_find_fav=True
-			break
+# RESTAURANTSが空でなければ、お気に入りの多い順にお気に入りかどうかを聞く
+if any(RESTAURANTS):
+    for i, restaurant in enumerate(RESTAURANTS):
+        print(restaurant['Name']+'は好きですか？[y/n]')
+        while True:
+            YN = input()
+            if YN == 'y':
+                break
+            if YN == 'yes':
+                YN = 'y'
+                break
+            if YN == 'Yes':
+                YN = 'y'
+                break
+            if YN == 'Y':
+                YN = 'y'
+                break
+            if YN == 'n':
+                break
+            if YN == 'no':
+                break
+            if YN == 'No':
+                break
+        # お気に入りのレストランが見つかれば聞くのを辞める
+        if YN == 'y':
+            RESTAURANTS[i]['Count'] = str(int(RESTAURANTS[i]['Count'])+1)
+            IS_FIND_FAB = True
+            break
 
 # お気に入りのレストランが無い場合はお気に入りのレストランを聞く
-if not is_find_fav:
-	print("どこのレストランが好きですか？")
-	restaurant_name=input()
-	restaurant_name=restaurant_name.title()
-	# 既にあるレストラン名であればカウントを1増やす
-	for	i, restaurant in enumerate(restaurants):
-		if restaurant['Name'] == restaurant_name:
-			restaurants[i]['Count']=str(int(restaurants[i]['Count'])+1)
-			is_find_already_restaurant_name = True
-			break
-	# 新規レストラン名であれば追加する
-	if not is_find_already_restaurant_name:
-		restaurants.append({'Name':restaurant_name, 'Count':'1'})	
-# レストランのお気に入り順にソートする
-restaurants=sorted(restaurants, key=lambda x:x['Count'], reverse=True)
+if not IS_FIND_FAB:
+    print("どこのレストランが好きですか？")
+    RESTAURANT_NAME = input()
+    RESTAURANT_NAME = RESTAURANT_NAME.title()
+    # 既にあるレストラン名であればカウントを1増やす
+    for i, restaurant in enumerate(RESTAURANTS):
+        if restaurant['Name'] == RESTAURANT_NAME:
+            RESTAURANTS[i]['Count'] = str(int(RESTAURANTS[i]['Count'])+1)
+            IS_FIND_ALREADY_RESTAURANT_NAME = True
+            break
+    # 新規レストラン名であれば追加する
+    if not IS_FIND_ALREADY_RESTAURANT_NAME:
+        RESTAURANTS.append({'Name': RESTAURANT_NAME, 'Count': '1'})
 
-# 結果を保存
+# レストランのお気に入り順にソートする
+RESTAURANTS = sorted(RESTAURANTS, key=lambda x: x['Count'], reverse=True)
+
+# 結果をcsv形式で保存する
 with open('restaurants.csv', 'w') as c:
-	fieldnames=['Name','Count']
-	w=csv.DictWriter(c,fieldnames=fieldnames)
-	w.writeheader()
-	for restaurant in restaurants:
-		w.writerow(restaurant)
+    fieldnames = ['Name', 'Count']
+    w = csv.DictWriter(c, fieldnames=fieldnames)
+    w.writeheader()
+    for restaurant in RESTAURANTS:
+        w.writerow(restaurant)
 
 # お礼
-print(person_name+'さんありがとうございました！')
-
-
-
+print(PERSON_NAME+'さんありがとうございました！')
